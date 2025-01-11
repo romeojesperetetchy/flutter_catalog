@@ -1,0 +1,111 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(EDGShopApp());
+}
+
+class EDGShopApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'EDG SHOP',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  final List<Map<String, String>> products = [
+    {"name": "T-shirt EDG", "price": "19.99", "image": "assets/tshirt.jpg"},
+    {"name": "Casquette EDG", "price": "15.99", "image": "assets/cap.jpg"},
+    {"name": "Sweat-shirt EDG", "price": "29.99", "image": "assets/sweatshirt.jpg"},
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('EDG SHOP'),
+      ),
+      body: GridView.builder(
+        padding: const EdgeInsets.all(8.0),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 8.0,
+          mainAxisSpacing: 8.0,
+        ),
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          final product = products[index];
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProductDetailPage(product: product),
+                ),
+              );
+            },
+            child: Card(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    product["image"]!,
+                    height: 120.0,
+                    width: 120.0,
+                  ),
+                  Text(product["name"]!),
+                  Text("\$${product["price"]}"),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class ProductDetailPage extends StatelessWidget {
+  final Map<String, String> product;
+
+  ProductDetailPage({required this.product});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(product["name"]!),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Image.asset(product["image"]!),
+            SizedBox(height: 20),
+            Text(
+              product["name"]!,
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Text(
+              "\$${product["price"]}",
+              style: TextStyle(fontSize: 20, color: Colors.green),
+            ),
+            SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () {
+                // Fonctionnalité de commande à implémenter
+              },
+              child: Text("Ajouter au panier"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
